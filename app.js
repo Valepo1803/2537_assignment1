@@ -47,12 +47,12 @@ app.get("/", (req, res) => {
   } else {
     let html = `Hello, ${req.session.username}!<br>
         <a href='/members'><button>Go to Members Area</button></a><br>
-        <a href='/Signout'><button>Sign out</button></a>`;
+        <a href='/signout'><button>Sign out</button></a>`;
     res.send(html);
   }
 });
 
-app.get("/Signout", (req, res) => {
+app.get("/signout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
@@ -129,7 +129,7 @@ app.get('/members', (req, res) => {
     res.send(`
         <h1>Hello, ${req.session.username}!</h1>
         <img src='/${randomImage}' style='width:300px;'><br>
-        <a href='/logout'><button>Logout</button></a>
+        <a href='/signout'><button>Sign out</button></a>
     `);
 });
 
