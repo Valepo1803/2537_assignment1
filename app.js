@@ -121,6 +121,7 @@ app.post('/loggingin', async (req, res) => {
 app.get('/members', (req, res) => {
     if (!req.session.authenticated) {
         res.redirect('/');
+        return;
     }
 
     const images = ['cat-1.jpg', 'cat-2.jpg', 'cat-3.jpg'];
