@@ -5,7 +5,7 @@ const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
 const app = express();
 const Joi = require("joi"); // Add this at the top with your other requires
-let PORT = 3000;
+let PORT = process.env.PORT || 3000;
 const expireTime = 60 * 60 * 1000;
 
 const mongodb_host = process.env.MONGODB_HOST;
