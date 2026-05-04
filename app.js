@@ -4,7 +4,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const bcrypt = require("bcrypt");
 const app = express();
-const Joi = require("joi"); // Add this at the top with your other requires
+const Joi = require("joi");
 let PORT = process.env.PORT || 3000;
 const expireTime = 60 * 60 * 1000;
 
@@ -55,9 +55,6 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-
-
-// Signup Page
 app.get('/signup', (req, res) => {
     res.send(`
         <form action='/signupSubmit' method='post'>
@@ -69,7 +66,6 @@ app.get('/signup', (req, res) => {
     `);
 });
 
-// Signup Logic
 app.post('/signupSubmit', async (req, res) => {
     let {username, email, password} = req.body;
     
@@ -86,7 +82,7 @@ app.post('/signupSubmit', async (req, res) => {
         return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
     await userCollection.insertOne({username, email, password: hashedPassword});
     
     req.session.authenticated = true;
@@ -108,14 +104,12 @@ app.get('/login', (req, res) => {
 app.post('/loggingin', async (req, res) => {
     let { email, password } = req.body;
 
-    // Search for user by email
     const user = await userCollection.findOne({ email: email });
 
-    // Compare hashed password
     if (user && await bcrypt.compare(password, user.password)) {
         req.session.authenticated = true;
         req.session.username = user.username;
-        req.session.cookie.maxAge = expireTime; // Use your 1-hour expireTime
+        req.session.cookie.maxAge = expireTime;
         res.redirect('/members');
     } else {
         res.send("Invalid email/password combination. <a href='/login'>Try again</a>");
@@ -125,11 +119,10 @@ app.post('/loggingin', async (req, res) => {
 
 app.get('/members', (req, res) => {
     if (!req.session.authenticated) {
-        res.redirect('/'); // Protect the route
-        return;
+        return res.redirect('/');
     }
 
-    const images = ['pic1.jpg', 'pic2.jpg', 'pic3.jpg']; // Ensure these exist in your /public folder
+    const images = ['pic1.jpg', 'pic2.jpg', 'pic3.jpg'];
     const randomImage = images[Math.floor(Math.random() * images.length)];
 
     res.send(`
