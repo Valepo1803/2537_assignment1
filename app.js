@@ -1,7 +1,9 @@
 require("dotenv").config();
+// Fix for SRV DNS resolution issues on some networks (e.g. TELUS)
+require("dns").setServers(["8.8.8.8"]);
 const express = require("express");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").default;
 const bcrypt = require("bcrypt");
 const app = express();
 const Joi = require("joi");
@@ -69,7 +71,6 @@ app.get('/signup', (req, res) => {
 app.post('/signupSubmit', async (req, res) => {
     let {username, email, password} = req.body;
     
-    // Joi Validation (Required)
     const schema = Joi.object({
         username: Joi.string().alphanum().max(20).required(),
         email: Joi.string().email().required(),
@@ -119,10 +120,10 @@ app.post('/loggingin', async (req, res) => {
 
 app.get('/members', (req, res) => {
     if (!req.session.authenticated) {
-        return res.redirect('/');
+        res.redirect('/');
     }
 
-    const images = ['pic1.jpg', 'pic2.jpg', 'pic3.jpg'];
+    const images = ['cat-1.jpg', 'cat-2.jpg', 'cat-3.jpg'];
     const randomImage = images[Math.floor(Math.random() * images.length)];
 
     res.send(`
