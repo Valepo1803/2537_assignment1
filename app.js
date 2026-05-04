@@ -47,12 +47,12 @@ app.get("/", (req, res) => {
   } else {
     let html = `Hello, ${req.session.username}!<br>
         <a href='/members'><button>Go to Members Area</button></a><br>
-        <a href='/logout'><button>Logout</button></a>`;
+        <a href='/Signout'><button>Sign out</button></a>`;
     res.send(html);
   }
 });
 
-app.get("/logout", (req, res) => {
+app.get("/Signout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
